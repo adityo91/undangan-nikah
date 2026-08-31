@@ -3,98 +3,376 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Undangan Pernikahan</title>
+  <title>Undangan Pernikahan - Romeo & Juliet</title>
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- QR Code Generator CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-</head>
-<body class="bg-gray-50 text-gray-800 antialiased font-sans">
 
-  <div class="max-w-md mx-auto min-h-screen bg-white shadow-lg p-6 space-y-8">
+  <style>
+    .font-serif-title { font-family: 'Cinzel', serif; }
+    .font-script { font-family: 'Great Vibes', cursive; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
     
-    <header class="text-center py-6 border-b">
-      <p class="text-sm tracking-widest uppercase text-gray-500">The Wedding Of</p>
-      <h1 class="text-3xl font-serif font-bold text-gray-900 mt-2">Romeo & Juliet</h1>
-      <div class="mt-4 p-3 bg-rose-50 rounded-lg inline-block">
-        <p class="text-xs text-gray-500">Kepada Yth:</p>
-        <p id="guest-name" class="font-bold text-rose-700 text-lg">Nama Tamu</p>
-      </div>
-    </header>
+    /* Animasi putar musik */
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spin-slow 8s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-stone-900 text-stone-800 antialiased selection:bg-rose-100">
 
-    <section class="text-center bg-gray-50 p-4 rounded-xl border border-gray-100">
-      <h2 class="font-bold text-gray-700">QR Penukaran Souvenir & Presensi</h2>
-      <p class="text-xs text-gray-500 mt-1 mb-3">Tunjukkan QR ini ke panitia di lokasi acara</p>
-      <div id="qrcode" class="flex justify-center my-2"></div>
-      <p id="guest-code-display" class="text-xs text-gray-400 font-mono mt-1"></p>
+  <!-- ==================== COVER OVERLAY (Pintu Masuk) ==================== -->
+  <div id="welcome-modal" class="fixed inset-0 z-50 flex flex-col items-center justify-between p-8 bg-stone-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-stone-800 via-stone-900 to-black text-white text-center transition-all duration-700">
+    <div class="pt-8">
+      <p class="text-xs uppercase tracking-[0.3em] text-rose-300 font-semibold mb-2">The Wedding Of</p>
+      <h1 class="font-serif-title text-3xl md:text-5xl font-bold tracking-wider text-rose-100">Romeo & Juliet</h1>
+    </div>
+
+    <div class="my-auto space-y-4">
+      <div class="w-40 h-40 mx-auto rounded-full p-1 border-2 border-rose-300/40 shadow-2xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=500&auto=format&fit=crop&q=80" alt="Cover" class="w-full h-full object-cover rounded-full">
+      </div>
+      <div>
+        <p class="text-xs text-stone-400">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+        <p id="cover-guest-name" class="text-xl font-semibold text-rose-200 mt-1">Nama Tamu</p>
+      </div>
+    </div>
+
+    <button onclick="bukaUndangan()" class="mb-6 px-8 py-3 bg-gradient-to-r from-rose-700 to-rose-600 hover:from-rose-600 hover:to-rose-500 text-white text-sm font-medium rounded-full shadow-lg shadow-rose-900/50 flex items-center space-x-2 active:scale-95 transition">
+      <i class="fa-solid fa-envelope-open"></i>
+      <span>Buka Undangan</span>
+    </button>
+  </div>
+
+  <!-- ==================== FLOATING MUSIC BUTTON ==================== -->
+  <div id="music-btn-container" class="fixed bottom-6 right-6 z-40 hidden">
+    <button onclick="toggleMusic()" id="music-btn" class="w-12 h-12 rounded-full bg-rose-800/90 backdrop-blur border border-rose-400/30 text-white shadow-xl flex items-center justify-center focus:outline-none">
+      <i id="music-icon" class="fa-solid fa-compact-disc text-xl animate-spin-slow text-rose-200"></i>
+    </button>
+  </div>
+
+  <audio id="bg-audio" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-wedding-113886.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
+  <main class="max-w-md mx-auto min-h-screen bg-stone-50 shadow-2xl relative overflow-hidden border-x border-stone-200">
+
+    <!-- HERO SECTION -->
+    <section class="relative text-center pt-16 pb-12 px-6 bg-gradient-to-b from-stone-100 to-stone-50">
+      <p class="text-xs uppercase tracking-[0.3em] text-rose-800 font-semibold mb-2">Walimatul 'Ursy</p>
+      <h1 class="font-serif-title text-3xl font-bold text-stone-900">Romeo & Juliet</h1>
+      <p class="font-script text-3xl text-rose-700 mt-2">Minggu, 20 September 2026</p>
+      
+      <!-- Countdown Container -->
+      <div class="grid grid-cols-4 gap-2 mt-8 text-stone-800">
+        <div class="bg-white p-2 rounded-xl shadow-sm border border-stone-200">
+          <span id="days" class="font-bold text-lg text-rose-700">00</span>
+          <p class="text-[10px] text-stone-500 uppercase">Hari</p>
+        </div>
+        <div class="bg-white p-2 rounded-xl shadow-sm border border-stone-200">
+          <span id="hours" class="font-bold text-lg text-rose-700">00</span>
+          <p class="text-[10px] text-stone-500 uppercase">Jam</p>
+        </div>
+        <div class="bg-white p-2 rounded-xl shadow-sm border border-stone-200">
+          <span id="minutes" class="font-bold text-lg text-rose-700">00</span>
+          <p class="text-[10px] text-stone-500 uppercase">Menit</p>
+        </div>
+        <div class="bg-white p-2 rounded-xl shadow-sm border border-stone-200">
+          <span id="seconds" class="font-bold text-lg text-rose-700">00</span>
+          <p class="text-[10px] text-stone-500 uppercase">Detik</p>
+        </div>
+      </div>
     </section>
 
-    <section class="text-center border p-4 rounded-xl space-y-3">
-      <h2 class="font-bold text-gray-700">Amplop Digital</h2>
-      <img src="https://via.placeholder.com/200x200?text=Scan+QRIS" alt="QRIS" class="mx-auto w-48 rounded shadow-sm">
-      <div class="text-xs space-y-1">
-        <p>BCA: <span id="rekening" class="font-mono font-bold">1234567890</span> (A.N Romeo)</p>
-        <button onclick="salinRekening()" class="px-3 py-1 bg-gray-200 text-gray-700 rounded text-xs active:bg-gray-300">
-          Salin Nomor Rekening
-        </button>
+    <!-- AYAT / QUOTE SECTION -->
+    <section class="px-6 py-8 text-center bg-white border-y border-stone-100">
+      <i class="fa-solid fa-quote-left text-rose-300 text-2xl mb-3"></i>
+      <p class="text-xs italic text-stone-600 leading-relaxed font-serif">
+        "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."
+      </p>
+      <p class="text-xs font-bold text-rose-800 mt-2 tracking-wider">QS. AR-RUM: 21</p>
+    </section>
+
+    <!-- PROFIL MEMPELAI -->
+    <section class="p-6 space-y-8 bg-stone-50">
+      <div class="text-center">
+        <p class="text-xs uppercase tracking-widest text-stone-400 font-semibold">Mempelai Pria & Wanita</p>
+        <h2 class="font-serif-title text-2xl font-bold text-stone-800 mt-1">Kami yang Berbahagia</h2>
+      </div>
+
+      <!-- Mempelai Pria -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200/80 shadow-sm text-center space-y-3">
+        <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-2 border-rose-200 shadow-md">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80" alt="Romeo" class="w-full h-full object-cover">
+        </div>
+        <h3 class="font-serif-title text-xl font-bold text-stone-900">Romeo Montague, S.T.</h3>
+        <p class="text-xs text-stone-500 leading-relaxed">
+          Putra pertama dari Bapak Lord Montague<br>& Ibu Lady Montague
+        </p>
+      </div>
+
+      <div class="text-center font-script text-4xl text-rose-600">&</div>
+
+      <!-- Mempelai Wanita -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200/80 shadow-sm text-center space-y-3">
+        <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-2 border-rose-200 shadow-md">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="Juliet" class="w-full h-full object-cover">
+        </div>
+        <h3 class="font-serif-title text-xl font-bold text-stone-900">Juliet Capulet, S.H.</h3>
+        <p class="text-xs text-stone-500 leading-relaxed">
+          Putri kedua dari Bapak Lord Capulet<br>& Ibu Lady Capulet
+        </p>
       </div>
     </section>
 
-    <section class="space-y-4">
-      <h2 class="font-bold text-gray-700">Buku Tamu & Ucapan</h2>
-      <form id="rsvp-form" class="space-y-3">
-        <select id="rsvp-kehadiran" class="w-full border p-2 rounded text-sm bg-white" required>
-          <option value="Hadir">Hadir</option>
-          <option value="Tidak Hadir">Tidak Hadir</option>
-        </select>
-        <textarea id="rsvp-pesan" placeholder="Tuliskan ucapan dan doa..." class="w-full border p-2 rounded text-sm" rows="3" required></textarea>
-        <button type="submit" id="btn-kirim" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-medium py-2 rounded text-sm transition">
+    <!-- WAKTU & RANGKAIAN ACARA -->
+    <section class="p-6 bg-stone-100/60 border-t border-stone-200 space-y-4">
+      <div class="text-center mb-6">
+        <p class="text-xs uppercase tracking-widest text-stone-400 font-semibold">Jadwal Acara</p>
+        <h2 class="font-serif-title text-2xl font-bold text-stone-800 mt-1">Waktu & Tempat</h2>
+      </div>
+
+      <!-- Card Akad -->
+      <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-start space-x-4">
+        <div class="p-3 bg-rose-50 text-rose-700 rounded-xl">
+          <i class="fa-solid fa-ring text-xl"></i>
+        </div>
+        <div class="space-y-1">
+          <h4 class="font-serif-title font-bold text-stone-800">Akad Nikah</h4>
+          <p class="text-xs text-rose-700 font-semibold">08.00 - 10.00 WIB</p>
+          <p class="text-xs text-stone-500">Masjid Agung Kota Impian<br>Jl. Pahlawan Bahagia No. 123</p>
+        </div>
+      </div>
+
+      <!-- Card Resepsi -->
+      <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-start space-x-4">
+        <div class="p-3 bg-rose-50 text-rose-700 rounded-xl">
+          <i class="fa-solid fa-champagne-glasses text-xl"></i>
+        </div>
+        <div class="space-y-1">
+          <h4 class="font-serif-title font-bold text-stone-800">Resepsi Pernikahan</h4>
+          <p class="text-xs text-rose-700 font-semibold">11.00 - 14.00 WIB</p>
+          <p class="text-xs text-stone-500">Ballroom Grand Palace Hotel<br>Jl. Sudirman Boulevard No. 45</p>
+        </div>
+      </div>
+
+      <!-- Map Button & Embed Link -->
+      <div class="pt-2 text-center">
+        <a href="https://maps.google.com" target="_blank" class="inline-flex items-center space-x-2 bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold py-3 px-6 rounded-full shadow-md transition">
+          <i class="fa-solid fa-location-dot"></i>
+          <span>Buka via Google Maps</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- QR CODE PRESENSI & SOUVENIR -->
+    <section class="p-6 bg-gradient-to-br from-rose-900 to-stone-900 text-white rounded-3xl mx-4 my-6 shadow-xl text-center space-y-4">
+      <div>
+        <span class="bg-rose-500/20 text-rose-300 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-rose-400/30">Akses Masuk & Souvenir</span>
+        <h3 class="font-serif-title text-xl font-bold mt-2">QR Code Kehadiran</h3>
+        <p class="text-xs text-stone-300 mt-1">Tunjukkan kode ini kepada panitia saat tiba di lokasi</p>
+      </div>
+
+      <div class="p-4 bg-white rounded-2xl inline-block shadow-inner">
+        <div id="qrcode" class="flex justify-center"></div>
+      </div>
+
+      <div>
+        <p class="text-xs text-stone-400">Kode Undangan:</p>
+        <p id="guest-code-display" class="font-mono font-bold text-rose-300 tracking-widest text-sm">GUEST</p>
+      </div>
+    </section>
+
+    <!-- AMPLOP DIGITAL -->
+    <section class="p-6 bg-white border-t border-stone-200 space-y-4">
+      <div class="text-center">
+        <p class="text-xs uppercase tracking-widest text-stone-400 font-semibold">Tanda Kasih</p>
+        <h2 class="font-serif-title text-2xl font-bold text-stone-800 mt-1">Amplop Digital</h2>
+        <p class="text-xs text-stone-500 mt-1">Doa restu Anda merupakan karunia terindah bagi kami.</p>
+      </div>
+
+      <div class="bg-stone-50 p-5 rounded-2xl border border-stone-200 text-center space-y-3">
+        <!-- Gambar QRIS -->
+        <div class="max-w-[180px] mx-auto p-2 bg-white rounded-xl border border-stone-200 shadow-sm">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020101021126570014ID.LINKAJA.WWW011893600911002234407002061234565204581253033605802ID5911ROMEO_JULIET6007JAKARTA62070703A0163047BE1" alt="QRIS" class="w-full rounded">
+          <p class="text-[10px] font-bold text-stone-500 mt-1">QRIS / Pembayaran Digital</p>
+        </div>
+
+        <div class="border-t border-stone-200 pt-3 space-y-2 text-xs">
+          <div class="flex justify-between items-center bg-white p-2.5 rounded-lg border border-stone-200">
+            <div class="text-left">
+              <span class="font-bold text-stone-700 block">Bank Central Asia (BCA)</span>
+              <span id="rek-bca" class="font-mono text-stone-600">8801234567</span>
+              <span class="text-[10px] text-stone-400 block">a.n Romeo Montague</span>
+            </div>
+            <button onclick="salinTeks('rek-bca')" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold rounded-md text-[11px] border border-stone-300 active:scale-95 transition">
+              Salin No
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUKU TAMU & LIVE WISHES -->
+    <section class="p-6 bg-stone-50 border-t border-stone-200 space-y-5">
+      <div class="text-center">
+        <p class="text-xs uppercase tracking-widest text-stone-400 font-semibold">Konfirmasi & Doa</p>
+        <h2 class="font-serif-title text-2xl font-bold text-stone-800 mt-1">Buku Tamu</h2>
+      </div>
+
+      <!-- Form RSVP -->
+      <form id="rsvp-form" class="space-y-3 bg-white p-5 rounded-2xl border border-stone-200 shadow-sm">
+        <div>
+          <label class="block text-xs font-semibold text-stone-600 mb-1">Konfirmasi Kehadiran</label>
+          <select id="rsvp-kehadiran" class="w-full border border-stone-300 p-2.5 rounded-xl text-xs bg-stone-50 focus:ring-2 focus:ring-rose-500 focus:outline-none" required>
+            <option value="Hadir">Saya akan hadir</option>
+            <option value="Tidak Hadir">Mohon maaf, belum bisa hadir</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-stone-600 mb-1">Ucapan & Doa</label>
+          <textarea id="rsvp-pesan" placeholder="Berikan doa & ucapan selamat..." class="w-full border border-stone-300 p-2.5 rounded-xl text-xs bg-stone-50 focus:ring-2 focus:ring-rose-500 focus:outline-none" rows="3" required></textarea>
+        </div>
+        <button type="submit" id="btn-kirim" class="w-full bg-rose-800 hover:bg-rose-900 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md transition active:scale-95">
           Kirim Ucapan
         </button>
       </form>
 
-      <div id="ucapan-list" class="space-y-2 max-h-60 overflow-y-auto pr-1">
-        <p class="text-center text-xs text-gray-400">Memuat ucapan...</p>
+      <!-- Kotak Ucapan Masuk -->
+      <div class="space-y-2">
+        <p class="text-xs font-semibold text-stone-500">Ucapan Terbaru (<span id="total-ucapan">0</span>)</p>
+        <div id="ucapan-list" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+          <p class="text-center text-xs text-stone-400 py-4">Memuat daftar ucapan...</p>
+        </div>
       </div>
     </section>
 
-  </div>
+    <!-- FOOTER -->
+    <footer class="py-8 text-center text-stone-400 text-xs bg-stone-900">
+      <p class="font-serif-title text-stone-300">Romeo & Juliet</p>
+      <p class="mt-1 text-[10px]">Terima kasih atas segala doa & restunya.</p>
+    </footer>
 
+  </main>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
   <script>
-    // GANTI DENGAN URL APPS SCRIPT ANDA
+    // 1. GANTI DENGAN URL DEPLOYMENT GOOGLE APPS SCRIPT ANDA
     const API_URL = "ISI_DENGAN_URL_WEB_APP_APPS_SCRIPT";
 
-    // 1. Ambil Parameter URL (?to=Nama+Tamu&code=T001)
-    const params = new URLSearchParams(window.location.search);
-    const guestName = params.get('to') || 'Tamu Undangan';
-    const guestCode = params.get('code') || 'GUEST';
+    // 2. Baca URL Params (?to=Nama+Tamu&code=T001)
+    const urlParams = new URLSearchParams(window.location.search);
+    const guestName = urlParams.get('to') || 'Tamu Undangan';
+    const guestCode = urlParams.get('code') || 'GUEST-01';
 
-    document.getElementById('guest-name').innerText = guestName;
-    document.getElementById('guest-code-display').innerText = `Kode: ${guestCode}`;
+    document.getElementById('cover-guest-name').innerText = guestName;
+    document.getElementById('guest-code-display').innerText = guestCode;
 
-    // 2. Generate QR Code
+    // 3. Generate QR Souvenir
     new QRCode(document.getElementById("qrcode"), {
       text: guestCode,
-      width: 150,
-      height: 150
+      width: 140,
+      height: 140,
+      colorDark: "#1c1917",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
     });
 
-    // 3. Salin Rekening
-    function salinRekening() {
-      navigator.clipboard.writeText("1234567890");
-      alert("Nomor rekening berhasil disalin!");
+    // 4. Audio Control & Buka Undangan
+    const audio = document.getElementById('bg-audio');
+    const musicContainer = document.getElementById('music-btn-container');
+    const musicIcon = document.getElementById('music-icon');
+    let isPlaying = false;
+
+    function bukaUndangan() {
+      const modal = document.getElementById('welcome-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => modal.remove(), 700);
+
+      musicContainer.classList.remove('hidden');
+      audio.play().then(() => {
+        isPlaying = true;
+      }).catch(err => {
+        console.log("Autoplay blocked:", err);
+      });
     }
 
-    // 4. Load Ucapan
+    function toggleMusic() {
+      if (isPlaying) {
+        audio.pause();
+        musicIcon.classList.remove('animate-spin-slow');
+        musicIcon.className = "fa-solid fa-play text-lg text-rose-200";
+        isPlaying = false;
+      } else {
+        audio.play();
+        musicIcon.classList.add('animate-spin-slow');
+        musicIcon.className = "fa-solid fa-compact-disc text-xl animate-spin-slow text-rose-200";
+        isPlaying = true;
+      }
+    }
+
+    // 5. Countdown Timer
+    const weddingDate = new Date("Sep 20, 2026 08:00:00").getTime();
+    setInterval(function() {
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+
+      const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerText = d > 0 ? d : "00";
+      document.getElementById("hours").innerText = h > 0 ? h : "00";
+      document.getElementById("minutes").innerText = m > 0 ? m : "00";
+      document.getElementById("seconds").innerText = s > 0 ? s : "00";
+    }, 1000);
+
+    // 6. Copy No Rekening
+    function salinTeks(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text);
+      alert("Nomor rekening berhasil disalin: " + text);
+    }
+
+    // 7. Load Ucapan dari Google Apps Script
     async function loadUcapan() {
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
         const container = document.getElementById('ucapan-list');
+        document.getElementById('total-ucapan').innerText = data.length || 0;
+        
+        if (data.length === 0) {
+          container.innerHTML = `<p class="text-center text-xs text-stone-400 py-3">Belum ada ucapan. Jadilah yang pertama!</p>`;
+          return;
+        }
+
         container.innerHTML = "";
         data.forEach(item => {
           container.innerHTML += `
-            <div class="bg-gray-50 border p-2 rounded text-xs">
-              <p class="font-bold text-gray-800">${item.nama} <span class="font-normal text-gray-400">(${item.kehadiran})</span></p>
-              <p class="text-gray-600 mt-1">${item.pesan}</p>
+            <div class="bg-white border border-stone-200/80 p-3 rounded-xl shadow-xs">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-stone-800 text-xs">${item.nama}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full ${item.kehadiran === 'Hadir' ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-500'}">${item.kehadiran}</span>
+              </div>
+              <p class="text-stone-600 text-xs mt-1.5 leading-relaxed">${item.pesan}</p>
             </div>
           `;
         });
@@ -104,7 +382,7 @@
     }
     loadUcapan();
 
-    // 5. Submit Form RSVP
+    // 8. Submit Form Ucapan
     document.getElementById('rsvp-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btn-kirim');
@@ -118,15 +396,19 @@
         pesan: document.getElementById('rsvp-pesan').value
       };
 
-      await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        document.getElementById('rsvp-pesan').value = "";
+        loadUcapan();
+      } catch (e) {
+        alert("Gagal mengirim ucapan, coba lagi.");
+      }
 
       btn.innerText = "Kirim Ucapan";
       btn.disabled = false;
-      document.getElementById('rsvp-pesan').value = "";
-      loadUcapan();
     });
   </script>
 </body>
