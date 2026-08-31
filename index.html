@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="scroll-smooth" id="html-root">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,23 +8,9 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts: Playfair Display + Plus Jakarta Sans + Alex Brush -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- AOS (Animate On Scroll) Library -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-  <!-- QR Code Generator CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
@@ -44,6 +30,21 @@
     }
   </script>
 
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- AOS (Animate On Scroll) Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- QR Code Generator CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <style>
     @keyframes spin-slow {
       from { transform: rotate(0deg); }
@@ -52,12 +53,14 @@
     .animate-spin-slow {
       animation: spin-slow 10s linear infinite;
     }
-    /* Custom scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
     }
     ::-webkit-scrollbar-track {
       background: #FAF6F0;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #181916;
     }
     ::-webkit-scrollbar-thumb {
       background: #C5A880;
@@ -65,36 +68,43 @@
     }
   </style>
 </head>
-<body class="bg-[#141512] text-[#2C3527] font-sans antialiased overflow-x-hidden selection:bg-champagne selection:text-darkolive">
+<body class="bg-[#141512] dark:bg-[#0d0e0c] text-[#2C3527] dark:text-stone-200 font-sans antialiased overflow-x-hidden selection:bg-champagne selection:text-darkolive transition-colors duration-500">
 
-  <!-- ==================== WELCOME / COVER OVERLAY ==================== -->
-  <div id="welcome-modal" class="fixed inset-0 z-50 flex flex-col justify-between items-center p-8 bg-[#141512] text-sand text-center transition-all duration-1000 ease-in-out">
-    <div class="pt-6" data-aos="fade-down" data-aos-duration="1000">
-      <p class="text-[11px] uppercase tracking-[0.4em] text-gold font-medium">The Wedding Celebration</p>
-      <h1 class="font-serif text-3xl md:text-5xl font-normal mt-3 tracking-wide text-sand">Romeo & Juliet</h1>
+  <!-- ==================== WELCOME / COVER OVERLAY (Pasti Pas di Layar) ==================== -->
+  <div id="welcome-modal" class="fixed inset-0 z-50 flex flex-col justify-between items-center p-6 md:p-8 bg-[#141512] text-sand text-center transition-all duration-700 ease-in-out">
+    <div class="pt-4">
+      <p class="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-gold font-medium">The Wedding Celebration</p>
+      <h1 class="font-serif text-3xl md:text-5xl font-normal mt-2 tracking-wide text-sand">Romeo & Juliet</h1>
     </div>
 
-    <div class="my-auto space-y-4" data-aos="zoom-in" data-aos-duration="1200">
-      <div class="w-44 h-60 md:w-52 md:h-72 mx-auto rounded-[100px] p-2 border border-gold/40 shadow-2xl overflow-hidden relative">
-        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&auto=format&fit=crop&q=80" alt="Couple" class="w-full h-full object-cover rounded-[90px]">
+    <div class="my-auto space-y-3 py-2">
+      <div class="w-36 h-48 md:w-48 md:h-64 mx-auto rounded-[80px] md:rounded-[100px] p-1.5 border border-gold/40 shadow-2xl overflow-hidden relative">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&auto=format&fit=crop&q=80" alt="Couple" class="w-full h-full object-cover rounded-[75px] md:rounded-[90px]">
       </div>
       <div>
         <p class="text-[11px] tracking-wider text-stone-400">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
-        <p id="cover-guest-name" class="text-xl md:text-2xl font-serif text-gold font-medium mt-1">Nama Tamu</p>
+        <p id="cover-guest-name" class="text-lg md:text-2xl font-serif text-gold font-medium mt-0.5">Nama Tamu</p>
       </div>
     </div>
 
-    <div class="pb-6" data-aos="fade-up" data-aos-duration="1000">
-      <button onclick="bukaUndangan()" class="px-8 py-3.5 bg-gradient-to-r from-gold to-[#a88a60] hover:brightness-110 text-darkolive font-semibold text-xs tracking-widest uppercase rounded-full shadow-2xl flex items-center space-x-2.5 active:scale-95 transition-all">
+    <!-- Tombol selalu terlihat tanpa perlu scroll -->
+    <div class="pb-4 w-full max-w-xs">
+      <button onclick="bukaUndangan()" class="w-full py-3.5 bg-gradient-to-r from-gold to-[#a88a60] hover:brightness-110 text-darkolive font-semibold text-xs tracking-widest uppercase rounded-full shadow-2xl flex items-center justify-center space-x-2.5 active:scale-95 transition-all">
         <i class="fa-regular fa-envelope-open text-sm"></i>
         <span>Buka Undangan</span>
       </button>
     </div>
   </div>
 
-  <!-- ==================== FLOATING MUSIC BUTTON ==================== -->
+  <!-- ==================== FLOATING THEME TOGGLE & MUSIC BUTTON ==================== -->
+  <!-- Theme Toggle (Pojok Kiri Atas) -->
+  <button onclick="toggleTheme()" id="theme-btn" class="fixed top-6 left-6 z-40 w-11 h-11 rounded-full bg-white/80 dark:bg-stone-800/80 backdrop-blur-md border border-champagne dark:border-stone-700 text-darkolive dark:text-gold shadow-xl flex items-center justify-center transition active:scale-90" title="Ganti Mode Gelap/Terang">
+    <i id="theme-icon" class="fa-solid fa-moon text-base"></i>
+  </button>
+
+  <!-- Music Toggle (Pojok Kanan Bawah) -->
   <div id="music-container" class="fixed bottom-6 right-6 z-40 hidden">
-    <button onclick="toggleMusic()" id="music-btn" class="w-12 h-12 rounded-full bg-darkolive/90 backdrop-blur-md border border-gold/50 text-gold shadow-2xl flex items-center justify-center transition active:scale-90">
+    <button onclick="toggleMusic()" id="music-btn" class="w-12 h-12 rounded-full bg-darkolive/90 dark:bg-stone-800/90 backdrop-blur-md border border-gold/50 text-gold shadow-2xl flex items-center justify-center transition active:scale-90" title="Putar/Hentikan Musik">
       <i id="music-icon" class="fa-solid fa-compact-disc text-xl animate-spin-slow"></i>
     </button>
   </div>
@@ -103,11 +113,11 @@
     <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-wedding-113886.mp3" type="audio/mp3">
   </audio>
 
-  <!-- ==================== MAIN DESKTOP & MOBILE WRAPPER ==================== -->
+  <!-- ==================== MAIN DESKTOP & MOBILE CONTAINER ==================== -->
   <div class="w-full min-h-screen lg:grid lg:grid-cols-12 max-w-7xl mx-auto shadow-2xl">
     
     <!-- LEFT PANEL (STICKY ON DESKTOP) -->
-    <aside class="hidden lg:flex lg:col-span-5 bg-[#181916] text-sand flex-col justify-between p-12 sticky top-0 h-screen border-r border-stone-800">
+    <aside class="hidden lg:flex lg:col-span-5 bg-[#181916] dark:bg-[#121310] text-sand flex-col justify-between p-12 sticky top-0 h-screen border-r border-stone-800">
       <div>
         <p class="text-[11px] uppercase tracking-[0.4em] text-gold font-medium">The Wedding Of</p>
         <h1 class="font-serif text-4xl xl:text-5xl font-normal mt-3 text-sand leading-tight">Romeo<br>& Juliet</h1>
@@ -130,80 +140,80 @@
     </aside>
 
     <!-- RIGHT PANEL (FLOW CONTENT / MOBILE MAIN) -->
-    <main class="lg:col-span-7 bg-sand min-h-screen relative overflow-hidden border-x lg:border-l-0 border-stone-200">
+    <main id="top-content" class="lg:col-span-7 bg-sand dark:bg-[#1b1d19] min-h-screen relative overflow-hidden border-x lg:border-l-0 border-stone-200 dark:border-stone-800 transition-colors duration-500">
 
       <!-- HERO SECTION -->
-      <section class="relative text-center pt-20 pb-14 px-6 md:px-12 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white via-sand to-sand">
+      <section class="relative text-center pt-20 pb-14 px-6 md:px-12 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white dark:from-[#242721] via-sand dark:via-[#1b1d19] to-sand dark:to-[#1b1d19]">
         <div data-aos="fade-down" data-aos-duration="1000">
-          <p class="text-[10px] uppercase tracking-[0.4em] text-olive font-bold">Walimatul 'Ursy</p>
-          <h1 class="font-serif text-3xl md:text-5xl font-normal text-darkolive mt-3">Romeo & Juliet</h1>
+          <p class="text-[10px] uppercase tracking-[0.4em] text-olive dark:text-gold font-bold">Walimatul 'Ursy</p>
+          <h1 class="font-serif text-3xl md:text-5xl font-normal text-darkolive dark:text-sand mt-3">Romeo & Juliet</h1>
           <p class="font-script text-3xl md:text-4xl text-gold mt-2">Minggu, 20 September 2026</p>
         </div>
 
         <!-- COUNTDOWN TIMER -->
         <div class="grid grid-cols-4 gap-2.5 md:gap-4 mt-10 max-w-md mx-auto" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-          <div class="bg-white/80 backdrop-blur-sm p-3.5 rounded-2xl border border-champagne shadow-sm">
-            <span id="days" class="font-serif text-xl md:text-2xl font-bold text-darkolive">00</span>
-            <p class="text-[9px] uppercase tracking-wider text-stone-500 mt-0.5">Hari</p>
+          <div class="bg-white/80 dark:bg-stone-800/80 backdrop-blur-sm p-3.5 rounded-2xl border border-champagne dark:border-stone-700 shadow-sm">
+            <span id="days" class="font-serif text-xl md:text-2xl font-bold text-darkolive dark:text-gold">00</span>
+            <p class="text-[9px] uppercase tracking-wider text-stone-500 dark:text-stone-400 mt-0.5">Hari</p>
           </div>
-          <div class="bg-white/80 backdrop-blur-sm p-3.5 rounded-2xl border border-champagne shadow-sm">
-            <span id="hours" class="font-serif text-xl md:text-2xl font-bold text-darkolive">00</span>
-            <p class="text-[9px] uppercase tracking-wider text-stone-500 mt-0.5">Jam</p>
+          <div class="bg-white/80 dark:bg-stone-800/80 backdrop-blur-sm p-3.5 rounded-2xl border border-champagne dark:border-stone-700 shadow-sm">
+            <span id="hours" class="font-serif text-xl md:text-2xl font-bold text-darkolive dark:text-gold">00</span>
+            <p class="text-[9px] uppercase tracking-wider text-stone-500 dark:text-stone-400 mt-0.5">Jam</p>
           </div>
-          <div class="bg-white/80 backdrop-blur-sm p-3.5 rounded-2xl border border-champagne shadow-sm">
-            <span id="minutes" class="font-serif text-xl md:text-2xl font-bold text-darkolive">00</span>
-            <p class="text-[9px] uppercase tracking-wider text-stone-500 mt-0.5">Menit</p>
+          <div class="bg-white/80 dark:bg-stone-800/80 backdrop-blur-sm p-3.5 rounded-2xl border border-champagne dark:border-stone-700 shadow-sm">
+            <span id="minutes" class="font-serif text-xl md:text-2xl font-bold text-darkolive dark:text-gold">00</span>
+            <p class="text-[9px] uppercase tracking-wider text-stone-500 dark:text-stone-400 mt-0.5">Menit</p>
           </div>
-          <div class="bg-white/80 backdrop-blur-sm p-3.5 rounded-2xl border border-champagne shadow-sm">
-            <span id="seconds" class="font-serif text-xl md:text-2xl font-bold text-darkolive">00</span>
-            <p class="text-[9px] uppercase tracking-wider text-stone-500 mt-0.5">Detik</p>
+          <div class="bg-white/80 dark:bg-stone-800/80 backdrop-blur-sm p-3.5 rounded-2xl border border-champagne dark:border-stone-700 shadow-sm">
+            <span id="seconds" class="font-serif text-xl md:text-2xl font-bold text-darkolive dark:text-gold">00</span>
+            <p class="text-[9px] uppercase tracking-wider text-stone-500 dark:text-stone-400 mt-0.5">Detik</p>
           </div>
         </div>
       </section>
 
       <!-- QUOTE AYAT -->
-      <section class="px-8 md:px-14 py-10 text-center bg-white border-y border-champagne/40">
+      <section class="px-8 md:px-14 py-10 text-center bg-white dark:bg-[#151713] border-y border-champagne/40 dark:border-stone-800">
         <div data-aos="fade-up" data-aos-duration="1000">
           <i class="fa-solid fa-quote-left text-gold text-2xl mb-4"></i>
-          <p class="text-xs md:text-sm italic text-stone-600 leading-relaxed font-serif max-w-lg mx-auto">
+          <p class="text-xs md:text-sm italic text-stone-600 dark:text-stone-300 leading-relaxed font-serif max-w-lg mx-auto">
             "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."
           </p>
-          <p class="text-[11px] font-bold text-darkolive tracking-widest uppercase mt-3">QS. Ar-Rum: 21</p>
+          <p class="text-[11px] font-bold text-darkolive dark:text-gold tracking-widest uppercase mt-3">QS. Ar-Rum: 21</p>
         </div>
       </section>
 
       <!-- PROFIL MEMPELAI -->
-      <section class="p-8 md:p-12 space-y-8 bg-sand">
+      <section class="p-8 md:p-12 space-y-8 bg-sand dark:bg-[#1b1d19]">
         <div class="text-center" data-aos="fade-up">
           <p class="text-[10px] uppercase tracking-[0.3em] text-stone-400 font-bold">The Happy Couple</p>
-          <h2 class="font-serif text-2xl md:text-3xl font-bold text-darkolive mt-1">Mempelai Pengantin</h2>
+          <h2 class="font-serif text-2xl md:text-3xl font-bold text-darkolive dark:text-sand mt-1">Mempelai Pengantin</h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           <!-- Mempelai Pria -->
-          <div class="bg-white p-6 rounded-[32px] border border-champagne shadow-sm text-center space-y-4" data-aos="fade-up" data-aos-duration="800">
+          <div class="bg-white dark:bg-stone-800/90 p-6 rounded-[32px] border border-champagne dark:border-stone-700 shadow-sm text-center space-y-4" data-aos="fade-up" data-aos-duration="800">
             <div class="w-32 h-44 mx-auto rounded-[60px] overflow-hidden border border-gold/40 shadow-md">
               <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80" alt="Groom" class="w-full h-full object-cover">
             </div>
             <div>
-              <h3 class="font-serif text-xl font-bold text-darkolive">Romeo Montague, S.T.</h3>
-              <p class="text-xs text-stone-500 mt-1.5 leading-relaxed">
+              <h3 class="font-serif text-xl font-bold text-darkolive dark:text-sand">Romeo Montague, S.T.</h3>
+              <p class="text-xs text-stone-500 dark:text-stone-400 mt-1.5 leading-relaxed">
                 Putra pertama dari pasangan<br>
-                <strong class="text-stone-700">Bapak Lord Montague</strong> & <br><strong class="text-stone-700">Ibu Lady Montague</strong>
+                <strong class="text-stone-700 dark:text-stone-200">Bapak Lord Montague</strong> & <br><strong class="text-stone-700 dark:text-stone-200">Ibu Lady Montague</strong>
               </p>
             </div>
           </div>
 
           <!-- Mempelai Wanita -->
-          <div class="bg-white p-6 rounded-[32px] border border-champagne shadow-sm text-center space-y-4" data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
+          <div class="bg-white dark:bg-stone-800/90 p-6 rounded-[32px] border border-champagne dark:border-stone-700 shadow-sm text-center space-y-4" data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
             <div class="w-32 h-44 mx-auto rounded-[60px] overflow-hidden border border-gold/40 shadow-md">
               <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80" alt="Bride" class="w-full h-full object-cover">
             </div>
             <div>
-              <h3 class="font-serif text-xl font-bold text-darkolive">Juliet Capulet, S.H.</h3>
-              <p class="text-xs text-stone-500 mt-1.5 leading-relaxed">
+              <h3 class="font-serif text-xl font-bold text-darkolive dark:text-sand">Juliet Capulet, S.H.</h3>
+              <p class="text-xs text-stone-500 dark:text-stone-400 mt-1.5 leading-relaxed">
                 Putri kedua dari pasangan<br>
-                <strong class="text-stone-700">Bapak Lord Capulet</strong> & <br><strong class="text-stone-700">Ibu Lady Capulet</strong>
+                <strong class="text-stone-700 dark:text-stone-200">Bapak Lord Capulet</strong> & <br><strong class="text-stone-700 dark:text-stone-200">Ibu Lady Capulet</strong>
               </p>
             </div>
           </div>
@@ -211,96 +221,107 @@
       </section>
 
       <!-- LOVE STORY TIMELINE -->
-      <section class="p-8 md:p-12 bg-white border-t border-champagne/50 space-y-6">
+      <section class="p-8 md:p-12 bg-white dark:bg-[#151713] border-t border-champagne/50 dark:border-stone-800 space-y-6">
         <div class="text-center" data-aos="fade-up">
           <p class="text-[10px] uppercase tracking-[0.3em] text-stone-400 font-bold">Our Journey</p>
-          <h2 class="font-serif text-2xl md:text-3xl font-bold text-darkolive mt-1">Kisah Cinta Kami</h2>
+          <h2 class="font-serif text-2xl md:text-3xl font-bold text-darkolive dark:text-sand mt-1">Kisah Cinta Kami</h2>
         </div>
 
-        <div class="relative border-l-2 border-champagne ml-4 md:ml-12 pl-6 space-y-8 mt-6">
+        <div class="relative border-l-2 border-champagne dark:border-stone-700 ml-4 md:ml-12 pl-6 space-y-8 mt-6">
           <div class="relative" data-aos="fade-up" data-aos-duration="800">
-            <div class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-gold border-4 border-white shadow"></div>
-            <span class="text-[11px] font-bold text-olive uppercase tracking-wider">Januari 2022</span>
-            <h4 class="font-serif font-bold text-darkolive text-base mt-0.5">Pertemuan Pertama</h4>
-            <p class="text-xs text-stone-600 mt-1 leading-relaxed">
-              Takdir mempertemukan kami pertama kali di sebuah acara kampus di Yogyakarta. Berawal dari diskusi santai, tercipta rasa nyaman yang terus bersemi.
+            <div class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-gold border-4 border-white dark:border-[#151713] shadow"></div>
+            <span class="text-[11px] font-bold text-olive dark:text-gold uppercase tracking-wider">Januari 2022</span>
+            <h4 class="font-serif font-bold text-darkolive dark:text-sand text-base mt-0.5">Pertemuan Pertama</h4>
+            <p class="text-xs text-stone-600 dark:text-stone-400 mt-1 leading-relaxed">
+              Takdir mempertemukan kami pertama kali di sebuah acara kampus di Yogyakarta. Dari sekadar obrolan ringan, tercipta kehangatan dan rasa nyaman.
             </p>
           </div>
 
           <div class="relative" data-aos="fade-up" data-aos-duration="800">
-            <div class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-gold border-4 border-white shadow"></div>
-            <span class="text-[11px] font-bold text-olive uppercase tracking-wider">Agustus 2024</span>
-            <h4 class="font-serif font-bold text-darkolive text-base mt-0.5">Komitmen Bersama</h4>
-            <p class="text-xs text-stone-600 mt-1 leading-relaxed">
-              Setelah melewati berbagai cerita dan saling mendukung proses satu sama lain, kami sepakat mengikat komitmen masa depan.
+            <div class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-gold border-4 border-white dark:border-[#151713] shadow"></div>
+            <span class="text-[11px] font-bold text-olive dark:text-gold uppercase tracking-wider">Agustus 2024</span>
+            <h4 class="font-serif font-bold text-darkolive dark:text-sand text-base mt-0.5">Komitmen Bersama</h4>
+            <p class="text-xs text-stone-600 dark:text-stone-400 mt-1 leading-relaxed">
+              Setelah melewati berbagai cerita dan saling menguatkan, kami sepakat untuk melangkah ke jenjang yang lebih serius.
             </p>
           </div>
 
           <div class="relative" data-aos="fade-up" data-aos-duration="800">
-            <div class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-gold border-4 border-white shadow"></div>
-            <span class="text-[11px] font-bold text-olive uppercase tracking-wider">Februari 2026</span>
-            <h4 class="font-serif font-bold text-darkolive text-base mt-0.5">Lamaran (Engagement)</h4>
-            <p class="text-xs text-stone-600 mt-1 leading-relaxed">
-              Dengan restu penuh dari kedua orang tua dan keluarga besar, kami resmi melangsungkan prosesi lamaran suci.
+            <div class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-gold border-4 border-white dark:border-[#151713] shadow"></div>
+            <span class="text-[11px] font-bold text-olive dark:text-gold uppercase tracking-wider">Februari 2026</span>
+            <h4 class="font-serif font-bold text-darkolive dark:text-sand text-base mt-0.5">Lamaran (Engagement)</h4>
+            <p class="text-xs text-stone-600 dark:text-stone-400 mt-1 leading-relaxed">
+              Dengan restu penuh kedua orang tua dan keluarga besar, kami resmi melangsungkan prosesi lamaran suci.
             </p>
           </div>
 
           <div class="relative" data-aos="fade-up" data-aos-duration="800">
-            <div class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-darkolive border-4 border-white shadow"></div>
+            <div class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-darkolive dark:bg-gold border-4 border-white dark:border-[#151713] shadow"></div>
             <span class="text-[11px] font-bold text-gold uppercase tracking-wider">September 2026</span>
-            <h4 class="font-serif font-bold text-darkolive text-base mt-0.5">Hari Bahagia</h4>
-            <p class="text-xs text-stone-600 mt-1 leading-relaxed">
-              Hari di mana kami mengikrarkan janji suci pernikahan untuk melangkah bersama mengarungi bahtera rumah tangga.
+            <h4 class="font-serif font-bold text-darkolive dark:text-sand text-base mt-0.5">Hari Bahagia</h4>
+            <p class="text-xs text-stone-600 dark:text-stone-400 mt-1 leading-relaxed">
+              Hari di mana kami mengikrarkan janji suci akad nikah untuk saling mendampingi seumur hidup.
             </p>
           </div>
         </div>
       </section>
 
-      <!-- WAKTU & RANGKAIAN ACARA -->
-      <section class="p-8 md:p-12 bg-sand border-t border-champagne/40 space-y-6">
+      <!-- WAKTU & RANGKAIAN ACARA (DENGAN 2 ARAHAN GOOGLE MAPS TERPISAH) -->
+      <section class="p-8 md:p-12 bg-sand dark:bg-[#1b1d19] border-t border-champagne/40 dark:border-stone-800 space-y-6">
         <div class="text-center" data-aos="fade-up">
           <p class="text-[10px] uppercase tracking-[0.3em] text-stone-400 font-bold">Save The Date</p>
-          <h2 class="font-serif text-2xl md:text-3xl font-bold text-darkolive mt-1">Waktu & Tempat</h2>
+          <h2 class="font-serif text-2xl md:text-3xl font-bold text-darkolive dark:text-sand mt-1">Waktu & Tempat</h2>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Card Akad -->
-          <div class="bg-white p-6 rounded-[28px] border border-champagne shadow-sm space-y-3 text-center" data-aos="zoom-in-up" data-aos-duration="800">
-            <div class="w-12 h-12 mx-auto rounded-full bg-sand flex items-center justify-center text-darkolive">
-              <i class="fa-solid fa-ring text-xl text-gold"></i>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Card Akad + Maps -->
+          <div class="bg-white dark:bg-stone-800/90 p-6 rounded-[28px] border border-champagne dark:border-stone-700 shadow-sm flex flex-col justify-between text-center space-y-4" data-aos="zoom-in-up" data-aos-duration="800">
+            <div class="space-y-2">
+              <div class="w-12 h-12 mx-auto rounded-full bg-sand dark:bg-stone-700 flex items-center justify-center text-darkolive dark:text-gold">
+                <i class="fa-solid fa-ring text-xl text-gold"></i>
+              </div>
+              <h3 class="font-serif text-lg font-bold text-darkolive dark:text-sand">Akad Nikah</h3>
+              <div class="text-xs text-stone-600 dark:text-stone-300 space-y-1">
+                <p class="font-semibold text-olive dark:text-gold">Pukul 08.00 - 10.00 WIB</p>
+                <p class="font-medium text-darkolive dark:text-sand">Masjid Agung Kota Impian</p>
+                <p class="text-[11px] text-stone-400">Jl. Pahlawan Bahagia No. 123, Yogyakarta</p>
+              </div>
             </div>
-            <h3 class="font-serif text-lg font-bold text-darkolive">Akad Nikah</h3>
-            <div class="text-xs text-stone-600 space-y-1">
-              <p class="font-semibold text-olive">Pukul 08.00 - 10.00 WIB</p>
-              <p class="font-medium text-darkolive">Masjid Agung Kota Impian</p>
-              <p class="text-[11px] text-stone-400">Jl. Pahlawan Bahagia No. 123, Yogyakarta</p>
-            </div>
+            
+            <!-- Tombol Maps Akad -->
+            <a href="https://maps.google.com/?q=Masjid+Agung+Yogyakarta" target="_blank" class="w-full py-2.5 bg-sand dark:bg-stone-700 hover:bg-champagne dark:hover:bg-stone-600 text-darkolive dark:text-sand font-semibold rounded-xl text-xs border border-champagne dark:border-stone-600 shadow-sm transition active:scale-95 flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-location-dot text-gold"></i>
+              <span>Google Maps Lokasi Akad</span>
+            </a>
           </div>
 
-          <!-- Card Resepsi -->
-          <div class="bg-white p-6 rounded-[28px] border border-champagne shadow-sm space-y-3 text-center" data-aos="zoom-in-up" data-aos-duration="800" data-aos-delay="150">
-            <div class="w-12 h-12 mx-auto rounded-full bg-sand flex items-center justify-center text-darkolive">
-              <i class="fa-solid fa-champagne-glasses text-xl text-gold"></i>
+          <!-- Card Resepsi + Maps -->
+          <div class="bg-white dark:bg-stone-800/90 p-6 rounded-[28px] border border-champagne dark:border-stone-700 shadow-sm flex flex-col justify-between text-center space-y-4" data-aos="zoom-in-up" data-aos-duration="800" data-aos-delay="150">
+            <div class="space-y-2">
+              <div class="w-12 h-12 mx-auto rounded-full bg-sand dark:bg-stone-700 flex items-center justify-center text-darkolive dark:text-gold">
+                <i class="fa-solid fa-champagne-glasses text-xl text-gold"></i>
+              </div>
+              <h3 class="font-serif text-lg font-bold text-darkolive dark:text-sand">Resepsi Pernikahan</h3>
+              <div class="text-xs text-stone-600 dark:text-stone-300 space-y-1">
+                <p class="font-semibold text-olive dark:text-gold">Pukul 11.00 - 14.00 WIB</p>
+                <p class="font-medium text-darkolive dark:text-sand">Grand Palace Ballroom</p>
+                <p class="text-[11px] text-stone-400">Jl. Sudirman Boulevard No. 45, Yogyakarta</p>
+              </div>
             </div>
-            <h3 class="font-serif text-lg font-bold text-darkolive">Resepsi Pernikahan</h3>
-            <div class="text-xs text-stone-600 space-y-1">
-              <p class="font-semibold text-olive">Pukul 11.00 - 14.00 WIB</p>
-              <p class="font-medium text-darkolive">Grand Palace Ballroom</p>
-              <p class="text-[11px] text-stone-400">Jl. Sudirman Boulevard No. 45, Yogyakarta</p>
-            </div>
-          </div>
-        </div>
 
-        <div class="text-center pt-2" data-aos="fade-up">
-          <a href="https://maps.google.com" target="_blank" class="inline-flex items-center space-x-2 px-6 py-3.5 rounded-full bg-darkolive text-sand hover:bg-olive text-xs font-semibold tracking-wider uppercase shadow-lg active:scale-95 transition">
-            <i class="fa-solid fa-map-location-dot text-gold"></i>
-            <span>Petunjuk Lokasi Acara (Google Maps)</span>
-          </a>
+            <!-- Tombol Maps Resepsi -->
+            <a href="https://maps.google.com/?q=Grand+Palace+Hotel+Yogyakarta" target="_blank" class="w-full py-2.5 bg-sand dark:bg-stone-700 hover:bg-champagne dark:hover:bg-stone-600 text-darkolive dark:text-sand font-semibold rounded-xl text-xs border border-champagne dark:border-stone-600 shadow-sm transition active:scale-95 flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-location-dot text-gold"></i>
+              <span>Google Maps Lokasi Resepsi</span>
+            </a>
+          </div>
+
         </div>
       </section>
 
       <!-- QR CODE SOUVENIR & PRESENSI -->
-      <section class="p-8 md:p-10 bg-[#22241F] text-sand rounded-[36px] mx-4 md:mx-8 my-8 shadow-2xl text-center space-y-5" data-aos="zoom-in" data-aos-duration="1000">
+      <section class="p-8 md:p-10 bg-[#22241F] dark:bg-[#121310] text-sand rounded-[36px] mx-4 md:mx-8 my-8 shadow-2xl text-center space-y-5" data-aos="zoom-in" data-aos-duration="1000">
         <div>
           <span class="bg-gold/10 text-gold text-[9px] uppercase font-bold tracking-[0.2em] px-3.5 py-1 rounded-full border border-gold/30">VIP Pass & Souvenir</span>
           <h3 class="font-serif text-xl md:text-2xl font-bold mt-2 text-sand">QR Code Akses Tamu</h3>
@@ -317,39 +338,37 @@
         </div>
       </section>
 
-      <!-- ==================== TANDA KASIH / AMPLOP & KIRIM KADO ==================== -->
-      <section class="p-8 md:p-12 bg-white border-t border-champagne/40 space-y-6">
+      <!-- TANDA KASIH / AMPLOP & KIRIM KADO -->
+      <section class="p-8 md:p-12 bg-white dark:bg-[#151713] border-t border-champagne/40 dark:border-stone-800 space-y-6">
         <div class="text-center" data-aos="fade-up">
           <p class="text-[10px] uppercase tracking-[0.3em] text-stone-400 font-bold">Wedding Gift</p>
-          <h2 class="font-serif text-2xl md:text-3xl font-bold text-darkolive mt-1">Tanda Kasih & Hadiah</h2>
-          <p class="text-xs text-stone-500 mt-1 max-w-sm mx-auto">Doa restu Anda merupakan karunia terindah bagi kami. Namun jika ingin memberikan tanda kasih secara digital maupun kado fisik, silakan gunakan opsi di bawah ini.</p>
+          <h2 class="font-serif text-2xl md:text-3xl font-bold text-darkolive dark:text-sand mt-1">Tanda Kasih & Hadiah</h2>
+          <p class="text-xs text-stone-500 dark:text-stone-400 mt-1 max-w-sm mx-auto">Doa restu Anda merupakan karunia terindah bagi kami. Namun jika ingin memberikan tanda kasih secara digital maupun kado fisik, silakan gunakan opsi di bawah ini.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           
-          <!-- Opsi 1: Amplop Digital (QRIS & Bank) -->
-          <div class="bg-sand p-6 rounded-[28px] border border-champagne text-center space-y-4 flex flex-col justify-between" data-aos="fade-up">
+          <!-- Opsi 1: Amplop Digital -->
+          <div class="bg-sand dark:bg-stone-800/90 p-6 rounded-[28px] border border-champagne dark:border-stone-700 text-center space-y-4 flex flex-col justify-between" data-aos="fade-up">
             <div>
-              <div class="w-10 h-10 mx-auto rounded-full bg-white flex items-center justify-center text-gold shadow-sm mb-3">
+              <div class="w-10 h-10 mx-auto rounded-full bg-white dark:bg-stone-700 flex items-center justify-center text-gold shadow-sm mb-3">
                 <i class="fa-solid fa-wallet text-lg"></i>
               </div>
-              <h3 class="font-serif text-lg font-bold text-darkolive">Amplop Digital (QRIS & Bank)</h3>
+              <h3 class="font-serif text-lg font-bold text-darkolive dark:text-sand">Amplop Digital (QRIS & Bank)</h3>
               
-              <!-- QRIS Box -->
-              <div class="max-w-[160px] mx-auto p-3 bg-white rounded-2xl border border-champagne shadow-sm mt-3">
+              <div class="max-w-[160px] mx-auto p-3 bg-white rounded-2xl border border-champagne dark:border-stone-600 shadow-sm mt-3">
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020101021126570014ID.LINKAJA.WWW011893600911002234407002061234565204581253033605802ID5911ROMEO_JULIET6007JAKARTA62070703A0163047BE1" alt="QRIS" class="w-full rounded-lg">
                 <p class="text-[9px] font-bold text-darkolive mt-1 uppercase tracking-wider">Scan Semua E-Wallet</p>
               </div>
 
-              <!-- Info Rekening -->
               <div class="pt-4 space-y-2 text-xs">
-                <div class="flex justify-between items-center bg-white p-3 rounded-2xl border border-champagne">
+                <div class="flex justify-between items-center bg-white dark:bg-stone-700/80 p-3 rounded-2xl border border-champagne dark:border-stone-600">
                   <div class="text-left">
-                    <span class="font-bold text-darkolive block">Bank BCA</span>
-                    <span id="rek-bca" class="font-mono text-stone-700 font-semibold">8801234567</span>
+                    <span class="font-bold text-darkolive dark:text-sand block">Bank BCA</span>
+                    <span id="rek-bca" class="font-mono text-stone-700 dark:text-stone-300 font-semibold">8801234567</span>
                     <span class="text-[10px] text-stone-400 block">a.n Romeo Montague</span>
                   </div>
-                  <button onclick="salinTeks('rek-bca', 'Nomor rekening BCA')" class="px-3.5 py-1.5 bg-sand hover:bg-champagne text-darkolive font-semibold rounded-xl text-[11px] border border-champagne transition active:scale-95">
+                  <button onclick="salinTeks('rek-bca', 'Nomor rekening BCA')" class="px-3.5 py-1.5 bg-sand dark:bg-stone-600 hover:bg-champagne dark:hover:bg-stone-500 text-darkolive dark:text-sand font-semibold rounded-xl text-[11px] border border-champagne dark:border-stone-500 transition active:scale-95">
                     Salin
                   </button>
                 </div>
@@ -357,38 +376,36 @@
             </div>
           </div>
 
-          <!-- Opsi 2: Kirim Kado / Hadiah Fisik -->
-          <div class="bg-sand p-6 rounded-[28px] border border-champagne text-center space-y-4 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="150">
+          <!-- Opsi 2: Kirim Kado Fisik -->
+          <div class="bg-sand dark:bg-stone-800/90 p-6 rounded-[28px] border border-champagne dark:border-stone-700 text-center space-y-4 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="150">
             <div>
-              <div class="w-10 h-10 mx-auto rounded-full bg-white flex items-center justify-center text-gold shadow-sm mb-3">
+              <div class="w-10 h-10 mx-auto rounded-full bg-white dark:bg-stone-700 flex items-center justify-center text-gold shadow-sm mb-3">
                 <i class="fa-solid fa-gift text-lg"></i>
               </div>
-              <h3 class="font-serif text-lg font-bold text-darkolive">Kirim Hadiah / Kado Fisik</h3>
-              <p class="text-xs text-stone-500 mt-1">Bagi yang ingin mengirimkan kado bingkisan, dapat ditujukan ke alamat kediaman kami:</p>
+              <h3 class="font-serif text-lg font-bold text-darkolive dark:text-sand">Kirim Hadiah / Kado Fisik</h3>
+              <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Bagi yang ingin mengirimkan kado bingkisan, dapat ditujukan ke alamat kediaman kami:</p>
               
-              <!-- Box Alamat Lengkap -->
-              <div class="bg-white p-4 rounded-2xl border border-champagne text-left text-xs space-y-2 mt-4 shadow-sm">
-                <div class="flex items-center space-x-2 text-darkolive font-bold">
+              <div class="bg-white dark:bg-stone-700/80 p-4 rounded-2xl border border-champagne dark:border-stone-600 text-left text-xs space-y-2 mt-4 shadow-sm">
+                <div class="flex items-center space-x-2 text-darkolive dark:text-sand font-bold">
                   <i class="fa-solid fa-house text-gold"></i>
                   <span>Rumah Mempelai</span>
                 </div>
-                <p class="text-stone-700 font-semibold">Penerima: Romeo & Juliet</p>
-                <p class="text-stone-500 text-[11px]">No. Telepon / WA: +62 812-3456-7890</p>
-                <p id="alamat-kado" class="text-stone-600 text-[11px] leading-relaxed bg-stone-50 p-2.5 rounded-xl border border-stone-100">
+                <p class="text-stone-700 dark:text-stone-200 font-semibold">Penerima: Romeo & Juliet</p>
+                <p class="text-stone-500 dark:text-stone-400 text-[11px]">No. Telepon / WA: +62 812-3456-7890</p>
+                <p id="alamat-kado" class="text-stone-600 dark:text-stone-300 text-[11px] leading-relaxed bg-stone-50 dark:bg-stone-800 p-2.5 rounded-xl border border-stone-100 dark:border-stone-600">
                   Jl. Melati Indah No. 88, RT 03/RW 05, Kelurahan Candimulyo, Kecamatan Candimulyo, Kabupaten Magelang, Jawa Tengah 56191
                 </p>
               </div>
             </div>
 
-            <!-- Tombol Salin Alamat & Titik Maps -->
             <div class="space-y-2 pt-2">
-              <button onclick="salinTeks('alamat-kado', 'Alamat pengiriman hadiah')" class="w-full py-2.5 bg-white hover:bg-champagne text-darkolive font-semibold rounded-xl text-xs border border-champagne shadow-sm transition active:scale-95 flex items-center justify-center space-x-2">
+              <button onclick="salinTeks('alamat-kado', 'Alamat pengiriman hadiah')" class="w-full py-2.5 bg-white dark:bg-stone-700 hover:bg-champagne dark:hover:bg-stone-600 text-darkolive dark:text-sand font-semibold rounded-xl text-xs border border-champagne dark:border-stone-600 shadow-sm transition active:scale-95 flex items-center justify-center space-x-2">
                 <i class="fa-regular fa-copy"></i>
                 <span>Salin Alamat Lengkap</span>
               </button>
-              <a href="https://maps.google.com" target="_blank" class="w-full py-2.5 bg-darkolive hover:bg-olive text-sand font-semibold rounded-xl text-xs tracking-wider uppercase shadow transition active:scale-95 flex items-center justify-center space-x-2">
-                <i class="fa-solid fa-location-arrow text-gold"></i>
-                <span>Petunjuk Titik Rumah (Google Maps)</span>
+              <a href="https://maps.google.com/?q=Candimulyo+Magelang" target="_blank" class="w-full py-2.5 bg-darkolive dark:bg-gold hover:bg-olive dark:hover:brightness-110 text-sand dark:text-darkolive font-semibold rounded-xl text-xs tracking-wider uppercase shadow transition active:scale-95 flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-location-arrow text-gold dark:text-darkolive"></i>
+                <span>Petunjuk Titik Rumah (Maps)</span>
               </a>
             </div>
 
@@ -398,33 +415,33 @@
       </section>
 
       <!-- BUKU TAMU & UCAPAN (RSVP) -->
-      <section class="p-8 md:p-12 bg-sand border-t border-champagne/50 space-y-6">
+      <section class="p-8 md:p-12 bg-sand dark:bg-[#1b1d19] border-t border-champagne/50 dark:border-stone-800 space-y-6">
         <div class="text-center" data-aos="fade-up">
           <p class="text-[10px] uppercase tracking-[0.3em] text-stone-400 font-bold">Wishes & Prayers</p>
-          <h2 class="font-serif text-2xl md:text-3xl font-bold text-darkolive mt-1">Buku Tamu & Ucapan</h2>
+          <h2 class="font-serif text-2xl md:text-3xl font-bold text-darkolive dark:text-sand mt-1">Buku Tamu & Ucapan</h2>
         </div>
 
         <!-- Form RSVP -->
-        <form id="rsvp-form" class="space-y-4 bg-white p-6 rounded-[28px] border border-champagne shadow-sm" data-aos="fade-up">
+        <form id="rsvp-form" class="space-y-4 bg-white dark:bg-stone-800/90 p-6 rounded-[28px] border border-champagne dark:border-stone-700 shadow-sm" data-aos="fade-up">
           <div>
-            <label class="block text-xs font-semibold text-darkolive mb-1.5">Konfirmasi Kehadiran</label>
-            <select id="rsvp-kehadiran" class="w-full border border-champagne p-3 rounded-2xl text-xs bg-sand focus:ring-2 focus:ring-gold focus:outline-none" required>
+            <label class="block text-xs font-semibold text-darkolive dark:text-sand mb-1.5">Konfirmasi Kehadiran</label>
+            <select id="rsvp-kehadiran" class="w-full border border-champagne dark:border-stone-600 p-3 rounded-2xl text-xs bg-sand dark:bg-stone-700 text-darkolive dark:text-sand focus:ring-2 focus:ring-gold focus:outline-none" required>
               <option value="Hadir">Saya akan hadir</option>
               <option value="Tidak Hadir">Mohon maaf, belum bisa hadir</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-darkolive mb-1.5">Ucapan & Doa</label>
-            <textarea id="rsvp-pesan" placeholder="Berikan doa terbaik untuk kedua mempelai..." class="w-full border border-champagne p-3 rounded-2xl text-xs bg-sand focus:ring-2 focus:ring-gold focus:outline-none" rows="3" required></textarea>
+            <label class="block text-xs font-semibold text-darkolive dark:text-sand mb-1.5">Ucapan & Doa</label>
+            <textarea id="rsvp-pesan" placeholder="Berikan doa terbaik untuk kedua mempelai..." class="w-full border border-champagne dark:border-stone-600 p-3 rounded-2xl text-xs bg-sand dark:bg-stone-700 text-darkolive dark:text-sand focus:ring-2 focus:ring-gold focus:outline-none" rows="3" required></textarea>
           </div>
-          <button type="submit" id="btn-kirim" class="w-full bg-darkolive hover:bg-olive text-sand font-semibold py-3.5 rounded-2xl text-xs tracking-wider uppercase shadow-md transition active:scale-95">
+          <button type="submit" id="btn-kirim" class="w-full bg-darkolive dark:bg-gold hover:bg-olive dark:hover:brightness-110 text-sand dark:text-darkolive font-semibold py-3.5 rounded-2xl text-xs tracking-wider uppercase shadow-md transition active:scale-95">
             Kirim Ucapan
           </button>
         </form>
 
         <!-- Live Wishes List -->
         <div class="space-y-3" data-aos="fade-up">
-          <p class="text-xs font-bold text-darkolive">Ucapan Masuk (<span id="total-ucapan">0</span>)</p>
+          <p class="text-xs font-bold text-darkolive dark:text-sand">Ucapan Masuk (<span id="total-ucapan">0</span>)</p>
           <div id="ucapan-list" class="space-y-2.5 max-h-80 overflow-y-auto pr-1">
             <p class="text-center text-xs text-stone-400 py-4">Memuat daftar ucapan...</p>
           </div>
@@ -432,7 +449,7 @@
       </section>
 
       <!-- FOOTER -->
-      <footer class="py-12 text-center text-stone-400 text-xs bg-[#181916]">
+      <footer class="py-12 text-center text-stone-400 text-xs bg-[#181916] dark:bg-[#10110e]">
         <p class="font-serif text-sand text-sm">Romeo & Juliet</p>
         <p class="mt-1 text-[10px] text-stone-500">Merupakan suatu kehormatan & kebahagiaan atas kehadiran serta doa restu Anda.</p>
       </footer>
@@ -442,17 +459,48 @@
 
   <!-- ==================== JAVASCRIPT LOGIC ==================== -->
   <script>
-    // 1. Inisialisasi Animasi AOS
+    // 1. Dark Mode / Light Mode Auto & Toggle Logic
+    const htmlRoot = document.getElementById('html-root');
+    const themeIcon = document.getElementById('theme-icon');
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        htmlRoot.classList.add('dark');
+        themeIcon.className = "fa-solid fa-sun text-base";
+      } else {
+        htmlRoot.classList.remove('dark');
+        themeIcon.className = "fa-solid fa-moon text-base";
+      }
+    }
+
+    function toggleTheme() {
+      if (htmlRoot.classList.contains('dark')) {
+        htmlRoot.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        themeIcon.className = "fa-solid fa-moon text-base";
+      } else {
+        htmlRoot.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        themeIcon.className = "fa-solid fa-sun text-base";
+      }
+    }
+
+    initTheme();
+
+    // 2. Inisialisasi AOS
     AOS.init({
       once: true,
       duration: 800,
       easing: 'ease-out-cubic'
     });
 
-    // 2. GANTI DENGAN URL DEPLOYMENT GOOGLE APPS SCRIPT ANDA
+    // 3. GANTI DENGAN URL APPS SCRIPT ANDA
     const API_URL = "ISI_DENGAN_URL_WEB_APP_APPS_SCRIPT";
 
-    // 3. Baca Parameter URL (?to=Nama+Tamu&code=T001)
+    // 4. Baca Parameter URL
     const urlParams = new URLSearchParams(window.location.search);
     const guestName = urlParams.get('to') || 'Tamu Undangan';
     const guestCode = urlParams.get('code') || 'GUEST-01';
@@ -463,7 +511,7 @@
     }
     document.getElementById('guest-code-display').innerText = guestCode;
 
-    // 4. Generate QR Souvenir
+    // 5. Generate QR Souvenir
     new QRCode(document.getElementById("qrcode"), {
       text: guestCode,
       width: 140,
@@ -473,19 +521,24 @@
       correctLevel: QRCode.CorrectLevel.H
     });
 
-    // 5. Audio Control & Buka Undangan
+    // 6. Audio Control & Buka Undangan
     const audio = document.getElementById('bg-audio');
     const musicContainer = document.getElementById('music-container');
     const musicIcon = document.getElementById('music-icon');
     let isPlaying = false;
 
     function bukaUndangan() {
+      // Gulir ke paling atas saat modal dibuka
+      window.scrollTo({ top: 0, behavior: 'instant' });
+
       const modal = document.getElementById('welcome-modal');
       modal.classList.add('opacity-0', 'pointer-events-none');
+      
       setTimeout(() => {
         modal.remove();
+        window.scrollTo({ top: 0, behavior: 'instant' });
         AOS.refresh();
-      }, 1000);
+      }, 700);
 
       musicContainer.classList.remove('hidden');
       audio.play().then(() => {
@@ -509,7 +562,7 @@
       }
     }
 
-    // 6. Countdown Timer (Target: 20 September 2026)
+    // 7. Countdown Timer
     const weddingDate = new Date("Sep 20, 2026 08:00:00").getTime();
     setInterval(function() {
       const now = new Date().getTime();
@@ -526,14 +579,14 @@
       document.getElementById("seconds").innerText = s > 0 ? s : "00";
     }, 1000);
 
-    // 7. Fungsi Salin Teks Dinamis
+    // 8. Salin Teks
     function salinTeks(elementId, label) {
       const text = document.getElementById(elementId).innerText.trim();
       navigator.clipboard.writeText(text);
       alert(label + " berhasil disalin:\n" + text);
     }
 
-    // 8. Load Ucapan dari Google Sheets
+    // 9. Load Ucapan dari Google Sheets
     async function loadUcapan() {
       try {
         const res = await fetch(API_URL);
@@ -549,12 +602,12 @@
         container.innerHTML = "";
         data.forEach(item => {
           container.innerHTML += `
-            <div class="bg-white border border-champagne p-3.5 rounded-2xl shadow-xs">
+            <div class="bg-white dark:bg-stone-800/90 border border-champagne dark:border-stone-700 p-3.5 rounded-2xl shadow-xs">
               <div class="flex items-center justify-between">
-                <span class="font-bold text-darkolive text-xs">${item.nama}</span>
-                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full ${item.kehadiran === 'Hadir' ? 'bg-olive/10 text-olive' : 'bg-stone-100 text-stone-500'}">${item.kehadiran}</span>
+                <span class="font-bold text-darkolive dark:text-sand text-xs">${item.nama}</span>
+                <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full ${item.kehadiran === 'Hadir' ? 'bg-olive/10 text-olive dark:bg-gold/10 dark:text-gold' : 'bg-stone-100 dark:bg-stone-700 text-stone-500 dark:text-stone-400'}">${item.kehadiran}</span>
               </div>
-              <p class="text-stone-600 text-xs mt-1.5 leading-relaxed">${item.pesan}</p>
+              <p class="text-stone-600 dark:text-stone-300 text-xs mt-1.5 leading-relaxed">${item.pesan}</p>
             </div>
           `;
         });
@@ -564,7 +617,7 @@
     }
     loadUcapan();
 
-    // 9. Submit Ucapan ke Google Apps Script
+    // 10. Submit Ucapan
     document.getElementById('rsvp-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btn-kirim');
