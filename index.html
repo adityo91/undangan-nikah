@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Undangan Pernikahan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased font-sans">
+
+  <div class="max-w-md mx-auto min-h-screen bg-white shadow-lg p-6 space-y-8">
+    
+    <header class="text-center py-6 border-b">
+      <p class="text-sm tracking-widest uppercase text-gray-500">The Wedding Of</p>
+      <h1 class="text-3xl font-serif font-bold text-gray-900 mt-2">Romeo & Juliet</h1>
+      <div class="mt-4 p-3 bg-rose-50 rounded-lg inline-block">
+        <p class="text-xs text-gray-500">Kepada Yth:</p>
+        <p id="guest-name" class="font-bold text-rose-700 text-lg">Nama Tamu</p>
+      </div>
+    </header>
+
+    <section class="text-center bg-gray-50 p-4 rounded-xl border border-gray-100">
+      <h2 class="font-bold text-gray-700">QR Penukaran Souvenir & Presensi</h2>
+      <p class="text-xs text-gray-500 mt-1 mb-3">Tunjukkan QR ini ke panitia di lokasi acara</p>
+      <div id="qrcode" class="flex justify-center my-2"></div>
+      <p id="guest-code-display" class="text-xs text-gray-400 font-mono mt-1"></p>
+    </section>
+
+    <section class="text-center border p-4 rounded-xl space-y-3">
+      <h2 class="font-bold text-gray-700">Amplop Digital</h2>
+      <img src="https://via.placeholder.com/200x200?text=Scan+QRIS" alt="QRIS" class="mx-auto w-48 rounded shadow-sm">
+      <div class="text-xs space-y-1">
+        <p>BCA: <span id="rekening" class="font-mono font-bold">1234567890</span> (A.N Romeo)</p>
+        <button onclick="salinRekening()" class="px-3 py-1 bg-gray-200 text-gray-700 rounded text-xs active:bg-gray-300">
+          Salin Nomor Rekening
+        </button>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="font-bold text-gray-700">Buku Tamu & Ucapan</h2>
+      <form id="rsvp-form" class="space-y-3">
+        <select id="rsvp-kehadiran" class="w-full border p-2 rounded text-sm bg-white" required>
+          <option value="Hadir">Hadir</option>
+          <option value="Tidak Hadir">Tidak Hadir</option>
+        </select>
+        <textarea id="rsvp-pesan" placeholder="Tuliskan ucapan dan doa..." class="w-full border p-2 rounded text-sm" rows="3" required></textarea>
+        <button type="submit" id="btn-kirim" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-medium py-2 rounded text-sm transition">
+          Kirim Ucapan
+        </button>
+      </form>
+
+      <div id="ucapan-list" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+        <p class="text-center text-xs text-gray-400">Memuat ucapan...</p>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // GANTI DENGAN URL APPS SCRIPT ANDA
+    const API_URL = "ISI_DENGAN_URL_WEB_APP_APPS_SCRIPT";
+
+    // 1. Ambil Parameter URL (?to=Nama+Tamu&code=T001)
+    const params = new URLSearchParams(window.location.search);
+    const guestName = params.get('to') || 'Tamu Undangan';
+    const guestCode = params.get('code') || 'GUEST';
+
+    document.getElementById('guest-name').innerText = guestName;
+    document.getElementById('guest-code-display').innerText = `Kode: ${guestCode}`;
+
+    // 2. Generate QR Code
+    new QRCode(document.getElementById("qrcode"), {
+      text: guestCode,
+      width: 150,
+      height: 150
+    });
+
+    // 3. Salin Rekening
+    function salinRekening() {
+      navigator.clipboard.writeText("1234567890");
+      alert("Nomor rekening berhasil disalin!");
+    }
+
+    // 4. Load Ucapan
+    async function loadUcapan() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        const container = document.getElementById('ucapan-list');
+        container.innerHTML = "";
+        data.forEach(item => {
+          container.innerHTML += `
+            <div class="bg-gray-50 border p-2 rounded text-xs">
+              <p class="font-bold text-gray-800">${item.nama} <span class="font-normal text-gray-400">(${item.kehadiran})</span></p>
+              <p class="text-gray-600 mt-1">${item.pesan}</p>
+            </div>
+          `;
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadUcapan();
+
+    // 5. Submit Form RSVP
+    document.getElementById('rsvp-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-kirim');
+      btn.innerText = "Mengirim...";
+      btn.disabled = true;
+
+      const payload = {
+        action: "kirim_ucapan",
+        nama: guestName,
+        kehadiran: document.getElementById('rsvp-kehadiran').value,
+        pesan: document.getElementById('rsvp-pesan').value
+      };
+
+      await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+
+      btn.innerText = "Kirim Ucapan";
+      btn.disabled = false;
+      document.getElementById('rsvp-pesan').value = "";
+      loadUcapan();
+    });
+  </script>
+</body>
+</html>
